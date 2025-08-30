@@ -13,8 +13,6 @@ class MainWindow(QMainWindow):
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
 
-
-
     def iniUI(self):
         self.setWindowTitle("Reproductor de musica")
         self.setGeometry(100,100,400,500)
