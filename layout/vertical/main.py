@@ -15,7 +15,7 @@ class MainWindow(QWidget):
         self.setWindowTitle('Layout Vertical Example')
 
         self.generar_formulario()
-        self.show()
+        self.show() 
 
     def generar_formulario(self):
         boton_uno = QPushButton('Botón 1')

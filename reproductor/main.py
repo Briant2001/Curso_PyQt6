@@ -2,7 +2,7 @@ import sys
 from PyQt6.QtWidgets import (QApplication,QMainWindow,QLabel, QPushButton
                              ,QDockWidget,QStatusBar,QTabWidget,QWidget
                              ,QHBoxLayout,QVBoxLayout,QListWidget)
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QAction, QKeySequence
 
 import os
 
@@ -15,8 +15,12 @@ class MainWindow(QMainWindow):
 
     def iniUI(self):
         self.setWindowTitle("Reproductor de musica")
+        self.sty
         self.setGeometry(100,100,400,500)
         self.generate_main_window()
+        # self.create_dock()
+        # self.create_menu()
+        # self.create_actions()
         self.show()
 
     def generate_main_window(self):
@@ -68,6 +72,27 @@ class MainWindow(QMainWindow):
 
         self.reproductor_container.setLayout(main_v_box)
 
+    def create_menu(self):
+        self.listar_musica_action = QAction("&Listar Musica",self,checkable=True)
+        self.listar_musica_action.setShortcut(QKeySequence("Ctrl+L"))
+        self.listar_musica_action.setStatusTip("Listar musica para reproducir")
+        self.listar_musica_action.triggered.connect(self.list_musica)
+    def create_actions(self):
+        self.menuBar()
+        menu_view = self.menuBar().addMenu("&Ver")
+        menu_view.addAction(self.listar_musica_action)
+
+    def list_musica(self):
+        if self.listar_musica_action.isChecked():
+            pass
+        else:
+            pass
+
+    def create_dock(self):
+        self.songs_list = QListWidget()
+        self.dock_list = QDockWidget("Lista de canciones",self)
+
+        pass
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
