@@ -1,13 +1,13 @@
 import sys
 from PyQt6.QtWidgets import (QApplication,QMainWindow,QLabel, QPushButton
                              ,QDockWidget,QStatusBar,QTabWidget,QWidget
-                             ,QHBoxLayout,QVBoxLayout,QListWidget)
+                             ,QHBoxLayout,QVBoxLayout,QListWidget,QFileDialog,QListWidgetItem)
 from PyQt6.QtGui import QPixmap, QAction, QKeySequence
-
+from PyQt6.QtCore import Qt,QStandardPaths
 import os
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self): 
         super().__init__()
         self.iniUI()
         self.statusBar = QStatusBar()
@@ -15,12 +15,11 @@ class MainWindow(QMainWindow):
 
     def iniUI(self):
         self.setWindowTitle("Reproductor de musica")
-        self.sty
         self.setGeometry(100,100,400,500)
         self.generate_main_window()
-        # self.create_dock()
-        # self.create_menu()
-        # self.create_actions()
+        self.create_dock()
+        self.create_actions()
+        self.create_menu()
         self.show()
 
     def generate_main_window(self):
@@ -72,30 +71,71 @@ class MainWindow(QMainWindow):
 
         self.reproductor_container.setLayout(main_v_box)
 
-    def create_menu(self):
+
+    def create_actions(self):
         self.listar_musica_action = QAction("&Listar Musica",self,checkable=True)
         self.listar_musica_action.setShortcut(QKeySequence("Ctrl+L"))
         self.listar_musica_action.setStatusTip("Listar musica para reproducir")
         self.listar_musica_action.triggered.connect(self.list_musica)
-    def create_actions(self):
-        self.menuBar()
-        menu_view = self.menuBar().addMenu("&Ver")
-        menu_view.addAction(self.listar_musica_action)
+        self.listar_musica_action.setChecked(True)
 
+        self.open_folder_action = QAction("Abrir Carpeta ",self) 
+        self.open_folder_action.setShortcut(QKeySequence("Ctrl+O"))
+        self.open_folder_action.setStatusTip("Abre tu carpeta de musica")
+        self.open_folder_action.triggered.connect(self.open_folder_musica)
+        self.open_folder_action.setChecked(True)
+       
+    def create_menu(self): 
+        self.menuBar()
+        menu_open = self.menuBar().addMenu("File")
+        menu_open.addAction(self.open_folder_action)
+
+        menu_view = self.menuBar().addMenu("Ver")
+        menu_view.addAction(self.listar_musica_action)
+   
     def list_musica(self):
         if self.listar_musica_action.isChecked():
-            pass
+            self.dock.show()
         else:
-            pass
+            self.dock.hide()
+
+
+    def open_folder_musica(self):
+        initial_dir = QStandardPaths.writableLocation(
+            QStandardPaths.StandardLocation.MusicLocation)
+        selected_folder = QFileDialog.getExistingDirectory(None,"Selecciona una carptea",initial_dir)
+        for archivo in os.listdir(selected_folder):
+            ruta_archivo = os.path.join(selected_folder,archivo)
+            if ruta_archivo.endswith(".mp3"):
+                self.songs_list.addItem(archivo)
 
     def create_dock(self):
         self.songs_list = QListWidget()
-        self.dock_list = QDockWidget("Lista de canciones",self)
-
-        pass
+        self.dock = QDockWidget("Lista de canciones",self)
+        self.dock.setWindowTitle("Lista de canciones")
+        self.dock.setAllowedAreas(
+            Qt.DockWidgetArea.LeftDockWidgetArea | Qt.DockWidgetArea.RightDockWidgetArea |  Qt.DockWidgetArea.BottomDockWidgetArea
+        )
+        self.dock.setWidget(self.songs_list)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea,self.dock)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
     sys.exit(app.exec())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

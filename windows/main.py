@@ -9,7 +9,6 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
-        self.statusBar.s("QStatusBar { background-color: lightgray; }")
         self.statusBar.showMessage("Ocurrió un error en la comunicacion", 5000)  # Mensaje por 5 segundos
         self.initUI()
 
